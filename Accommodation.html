@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accommodation Application</title>
+    <style>
+        /* Global styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+
+        /* Main container styling */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo styling */
+        .logo {
+            max-width: 180px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        /* Heading styling */
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Form input styling */
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            text-align: left;
+            width: 100%;
+            color: #555;
+        }
+
+        input[type="text"], input[type="file"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 120px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+        }
+
+        /* Centering loading message */
+        .loading p {
+            font-size: 18px;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="logo.png" alt="Logo" class="logo">
+        <h2>Accommodation Application</h2>
+
+        <form id="accommodationForm">
+            <label for="studentID">Student ID (8 digits):</label>
+            <input type="text" id="studentID" required maxlength="8" pattern="\d{8}" title="Student ID should be exactly 8 digits">
+
+            <label for="pdfUploader">Upload Accommodation Application (PDF):</label>
+            <input type="file" id="pdfUploader" accept=".pdf" required>
+
+            <label for="reason">Reason for Accommodation:</label>
+            <textarea id="reason" required></textarea>
+
+            <button type="button" class="btn" onclick="applyAccommodation()">Apply</button>
+        </form>
+
+        <!-- Confirmation and loading -->
+        <div class="loading" id="loading">
+            <p>Loading...</p>
+        </div>
+
+        <!-- Result display -->
+        <div class="result" id="result">
+            <h3>Application Submitted</h3>
+            <p><strong>Student ID:</strong> <span id="resultStudentID"></span></p>
+            <p><strong>Accommodation Reason:</strong> <span id="resultReason"></span></p>
+            <p><strong>PDF Uploaded:</strong> <span id="resultFile"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function applyAccommodation() {
+            // Retrieve user input
+            const studentID = document.getElementById('studentID').value;
+            const reason = document.getElementById('reason').value;
+            const pdfUploader = document.getElementById('pdfUploader').files[0];
+
+            // Ensure all fields are filled
+            if (!studentID || !reason || !pdfUploader) {
+                alert("All fields are required.");
+                return;
+            }
+
+            // Display confirmation prompt
+            if (confirm("Are you sure you want to submit this application? This action is not reversible.")) {
+                // Show loading animation
+                document.getElementById('loading').style.display = 'block';
+
+                // Set a timeout for 5 seconds before finalizing the application
+                setTimeout(function() {
+                    // Hide loading and display result
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('accommodationForm').reset();
+
+                    // Display the result
+                    document.getElementById('resultStudentID').textContent = studentID;
+                    document.getElementById('resultReason').textContent = reason;
+                    document.getElementById('resultFile').textContent = pdfUploader.name;
+
+                    document.getElementById('result').style.display = 'block';
+                }, 5000); // 5 seconds delay
+            }
+        }
+    </script>
+
+</body>
+</html>
